@@ -1,4 +1,4 @@
-package org.example.domain.enity;
+package authservice.domain.enity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,12 +12,21 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(table = "users")
+@Entity(name = "users")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false,  updatable = false)
+    @Column(nullable = false,  updatable = false, name = "user_id")
     private Long id;
+
+    @Column(nullable = false)
+    private String fName;
+
+    @Column(nullable = false)
+    private String lName;
+
+    @Column(nullable = false, updatable = false)
+    private String email;
 
     @Column(nullable = false,  updatable = false)
     private String username;
@@ -31,6 +40,6 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<UserRole> roles;
+    private Set<Role> roles;
 
 }
