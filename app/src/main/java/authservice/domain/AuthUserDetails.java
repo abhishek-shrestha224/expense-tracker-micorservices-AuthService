@@ -1,7 +1,7 @@
 package authservice.domain;
 
 import authservice.domain.enity.UserEntity;
-import authservice.domain.enity.Role;
+import authservice.domain.enity.RoleEntity;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,7 +26,7 @@ public class AuthUserDetails   implements UserDetails {
         this.password= byUsername.getPassword();
         List<GrantedAuthority> auths = new ArrayList<>();
 
-        for(Role role : byUsername.getRoles()){
+        for(RoleEntity role : byUsername.getRoles()){
             auths.add(new SimpleGrantedAuthority(role.getName().toUpperCase()));
         }
         this.authorities = auths;
