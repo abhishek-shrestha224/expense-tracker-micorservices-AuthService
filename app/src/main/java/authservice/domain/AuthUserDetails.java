@@ -2,7 +2,6 @@ package authservice.domain;
 
 import authservice.domain.enity.UserEntity;
 import authservice.domain.enity.RoleEntity;
-import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,7 +12,6 @@ import java.util.Collection;
 import java.util.List;
 
 @Data
-@Builder
 public class AuthUserDetails   implements UserDetails {
 
     private String username;

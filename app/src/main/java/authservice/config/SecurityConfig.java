@@ -28,7 +28,7 @@ public class SecurityConfig {
 
     private final UserRepository userRepository;
 
-    public  SecurityConfig(final UserRepository userRepository) {
+    public SecurityConfig(final UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -60,7 +60,6 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .build();
     }
-
 
 
     @Bean
