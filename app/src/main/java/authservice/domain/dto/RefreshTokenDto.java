@@ -8,7 +8,6 @@ import java.time.Instant;
 @Builder
 public record RefreshTokenDto(
         String token,
-        Instant expiresAt,
-        UserEntity user
+        Instant expiresAt
 ) {
 }
