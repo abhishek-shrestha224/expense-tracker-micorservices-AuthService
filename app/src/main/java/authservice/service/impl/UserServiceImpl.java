@@ -1,6 +1,6 @@
 package authservice.service.impl;
 
-import authservice.domain.dto.UserCreateDto;
+import authservice.domain.request.UserCreateDto;
 import authservice.domain.enity.UserEntity;
 import authservice.repository.UserRepository;
 import authservice.service.UserService;

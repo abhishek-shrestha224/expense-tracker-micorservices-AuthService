@@ -1,6 +1,6 @@
 package authservice.controller;
 
-import authservice.domain.dto.UserCreateDto;
+import authservice.domain.request.UserCreateDto;
 import authservice.service.JwtService;
 import authservice.service.RefreshTokenService;
 import authservice.service.UserService;

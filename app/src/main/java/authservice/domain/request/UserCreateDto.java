@@ -1,4 +1,4 @@
-package authservice.domain.dto;
+package authservice.domain.request;
 
 import lombok.Builder;
 

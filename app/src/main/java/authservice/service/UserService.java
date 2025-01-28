@@ -1,6 +1,6 @@
 package authservice.service;
 
-import authservice.domain.dto.UserCreateDto;
+import authservice.domain.request.UserCreateDto;
 
 public interface UserService {
 
