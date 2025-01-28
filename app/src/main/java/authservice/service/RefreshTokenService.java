@@ -6,7 +6,7 @@ import authservice.domain.exception.TokenExpiredException;
 public interface RefreshTokenService {
     RefreshTokenEntity createRefreshToken(String username);
 
-    RefreshTokenEntity verifyExpiration(RefreshTokenEntity token) throws TokenExpiredException;
+    Boolean isTokenExpired(RefreshTokenEntity token) ;
 
     RefreshTokenEntity findByToken(String token);
 }

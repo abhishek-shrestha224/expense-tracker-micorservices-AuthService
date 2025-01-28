@@ -44,12 +44,12 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public RefreshTokenEntity verifyExpiration(RefreshTokenEntity token) throws TokenExpiredException {
+    public Boolean isTokenExpired(RefreshTokenEntity token) {
         if (token.getExpiresAt().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);
-            throw new TokenExpiredException(token.getToken() + " is expired");
+            return true;
         }
 
-        return token;
+        return false;
     }
 }

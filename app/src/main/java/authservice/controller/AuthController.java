@@ -1,7 +1,9 @@
 package authservice.controller;
 
 import authservice.domain.enity.RefreshTokenEntity;
+import authservice.domain.enity.UserEntity;
 import authservice.domain.request.LoginRequestDto;
+import authservice.domain.request.TokenRefreshDto;
 import authservice.domain.request.UserCreateDto;
 import authservice.domain.response.JwtResponse;
 import authservice.service.JwtService;
@@ -71,6 +73,27 @@ public class AuthController {
                 .accessToken(jwtService.generateToken(credentials.username()))
                 .refreshToken(refreshToken.getToken())
                 .build());
-
     }
+
+
+    @PostMapping("auth/v1/refreshToken")
+    public ResponseEntity<JwtResponse> refreshToken(@RequestBody TokenRefreshDto tokenRefreshDto) {
+        RefreshTokenEntity refreshToken = refreshTokenService.findByToken(tokenRefreshDto.token());
+        if (refreshToken == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+        if (!refreshTokenService.isTokenExpired(refreshToken)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+        final UserEntity user = refreshToken.getUser();
+
+        final String accessToken = jwtService.generateToken(user.getUsername());
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                JwtResponse.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken.getToken())
+                        .build()
+        );
+    }
+
+
 }
