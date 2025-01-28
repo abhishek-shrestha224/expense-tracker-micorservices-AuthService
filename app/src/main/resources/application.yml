@@ -1,0 +1,26 @@
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mysql-18e0bf14-meabhi224-9f12.g.aivencloud.com:28713/defaultdb?ssl-mode=REQUIRED
+    username: avnadmin
+    password: AVNS_QpbxTBFhCVZngbI_GxC
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        dialect: org.hibernate.dialect.MySQL8Dialect
+server:
+  port: 9898
+
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+    authservice: DEBUG
