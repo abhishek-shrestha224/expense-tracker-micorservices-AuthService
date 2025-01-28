@@ -27,7 +27,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public RefreshTokenEntity createRefreshToken(String username) {
         final UserEntity user = userRepository.findByUsername(username).orElse(null);
-        if(null == user) return null;
+        if (null == user) return null;
 
         RefreshTokenEntity refreshToken = RefreshTokenEntity.builder()
                 .token(UUID.randomUUID().toString())
@@ -37,11 +37,17 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         return refreshTokenRepository.save(refreshToken);
     }
 
+
+    @Override
+    public RefreshTokenEntity findByToken(String token) {
+        return refreshTokenRepository.findByToken(token).orElse(null);
+    }
+
     @Override
     public RefreshTokenEntity verifyExpiration(RefreshTokenEntity token) throws TokenExpiredException {
-        if(token.getExpiresAt().compareTo(Instant.now()) < 0){
+        if (token.getExpiresAt().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);
-            throw new TokenExpiredException(token.getToken()+" is expired");
+            throw new TokenExpiredException(token.getToken() + " is expired");
         }
 
         return token;

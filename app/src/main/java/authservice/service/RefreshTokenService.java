@@ -7,4 +7,6 @@ public interface RefreshTokenService {
     RefreshTokenEntity createRefreshToken(String username);
 
     RefreshTokenEntity verifyExpiration(RefreshTokenEntity token) throws TokenExpiredException;
+
+    RefreshTokenEntity findByToken(String token);
 }
