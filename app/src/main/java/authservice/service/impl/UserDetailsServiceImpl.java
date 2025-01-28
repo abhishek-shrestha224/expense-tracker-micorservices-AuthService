@@ -18,11 +18,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
 
-    public UserDetailsServiceImpl(final UserRepository userRepository, final PasswordEncoder passwordEncoder) {
+    public UserDetailsServiceImpl(final UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -31,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         log.info("Loading user of username{}", username);
 
         UserEntity user = userRepository.findByUsername(username)
-                                        .orElseThrow(()-> new UsernameNotFoundException("User not found with username: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         log.info("User Loaded Successfully..!!!");
         return new AuthUserDetails(user);
