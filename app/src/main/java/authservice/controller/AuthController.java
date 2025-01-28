@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,25 +64,40 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> authenticateAndGetToken(@RequestBody LoginRequestDto credentials) {
-        Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.username(), credentials.password()));
+     public ResponseEntity<String> authenticateAndGetToken(@RequestBody LoginRequestDto credentials) {
 
-        if (!auth.isAuthenticated()) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        try {
+            Authentication auth = authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(credentials.username(), credentials.password()));
 
-        RefreshTokenEntity refreshToken = refreshTokenService.createRefreshToken(credentials.username());
-        return ResponseEntity.status(HttpStatus.OK).body(JwtResponse.builder()
-                .accessToken(jwtService.generateToken(credentials.username()))
-                .refreshToken(refreshToken.getToken())
-                .build());
+            if (!auth.isAuthenticated()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("auth failed");
+
+            RefreshTokenEntity refreshToken = refreshTokenService.createRefreshToken(credentials.username());
+            return ResponseEntity.status(HttpStatus.OK).body(JwtResponse.builder()
+                    .accessToken(jwtService.generateToken(credentials.username()))
+                    .refreshToken(refreshToken.getToken())
+                    .build().toString());
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
+
+
     }
+@PostMapping("/logout")
+public ResponseEntity<String> logout(@RequestBody TokenRefreshDto tokenRefreshDto) {
+        final Boolean isLoggedOut = refreshTokenService.deleteRefreshToken(tokenRefreshDto.token());
 
+        if(Boolean.FALSE.equals(isLoggedOut)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Failed");
 
-    @PostMapping("auth/v1/refreshToken")
+        return ResponseEntity.status(HttpStatus.OK).body("Successfully logged out");
+}
+
+    @PostMapping("/refreshToken")
     public ResponseEntity<JwtResponse> refreshToken(@RequestBody TokenRefreshDto tokenRefreshDto) {
         RefreshTokenEntity refreshToken = refreshTokenService.findByToken(tokenRefreshDto.token());
-        if (refreshToken == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        if (refreshToken == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 
-        if (!refreshTokenService.isTokenExpired(refreshToken)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        if (Boolean.TRUE.equals(refreshTokenService.isTokenExpired(refreshToken))) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 
         final UserEntity user = refreshToken.getUser();
 

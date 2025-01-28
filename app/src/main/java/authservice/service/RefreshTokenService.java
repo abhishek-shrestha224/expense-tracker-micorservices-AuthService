@@ -9,4 +9,6 @@ public interface RefreshTokenService {
     Boolean isTokenExpired(RefreshTokenEntity token) ;
 
     RefreshTokenEntity findByToken(String token);
+
+    Boolean deleteRefreshToken(String token);
 }

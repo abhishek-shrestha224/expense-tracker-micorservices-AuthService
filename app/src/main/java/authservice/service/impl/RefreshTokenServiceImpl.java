@@ -26,12 +26,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshTokenEntity createRefreshToken(String username) {
+
         final UserEntity user = userRepository.findByUsername(username).orElse(null);
         if (null == user) return null;
 
         RefreshTokenEntity refreshToken = RefreshTokenEntity.builder()
                 .token(UUID.randomUUID().toString())
-                .expiresAt(Instant.now().plusMillis(60000))
+                .expiresAt(Instant.now().plusMillis(86400000))
                 .user(user)
                 .build();
         return refreshTokenRepository.save(refreshToken);
@@ -51,5 +52,15 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         }
 
         return false;
+    }
+
+    @Override
+    public Boolean deleteRefreshToken(String token) {
+       final RefreshTokenEntity refreshToken= refreshTokenRepository.findByToken(token).orElse(null);
+       if (null == refreshToken) return false;
+
+       refreshTokenRepository.delete(refreshToken);
+       return true;
+
     }
 }

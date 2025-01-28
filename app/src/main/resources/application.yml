@@ -18,9 +18,9 @@ server:
   port: 9898
 
 
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG
-    authservice: DEBUG
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: DEBUG
+#    authservice: DEBUG
