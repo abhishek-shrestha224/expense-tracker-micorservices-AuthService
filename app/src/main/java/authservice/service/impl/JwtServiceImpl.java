@@ -81,7 +81,6 @@ public class JwtServiceImpl implements JwtService {
         Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
-
     @Override
     public Claims extractAllClaims(String token) {
         return Jwts
@@ -91,5 +90,4 @@ public class JwtServiceImpl implements JwtService {
                 .parseSignedClaims(token)
                 .getPayload();
     }
-
 }
