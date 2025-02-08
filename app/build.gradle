@@ -44,6 +44,9 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-impl:0.12.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 
+    // https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka
+    implementation group: 'org.springframework.kafka', name: 'spring-kafka', version: '3.3.2'
+
     implementation group: 'org.projectlombok', name:'lombok', version: "$lombokVersion"
     compileOnly group: 'org.projectlombok', name:'lombok', version: "$lombokVersion"
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
