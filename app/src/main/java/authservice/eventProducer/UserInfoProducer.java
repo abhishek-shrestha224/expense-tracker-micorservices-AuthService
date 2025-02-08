@@ -13,10 +13,10 @@ public class UserInfoProducer {
     @Value("${spring.kafka.topic.user-topic-name}")
     private static String TOPIC_NAME;
 
-    private final KafkaTemplate<String, UserDto> kafkaTemplate;
+    private final KafkaTemplate<String, UserDto> userKafkaTemplate;
 
-    public UserInfoProducer(final KafkaTemplate<String, UserDto> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
+    public UserInfoProducer(final KafkaTemplate<String, UserDto> userKafkaTemplate) {
+        this.userKafkaTemplate = userKafkaTemplate;
     }
 
     public void send(final UserDto userDto) {
@@ -25,6 +25,6 @@ public class UserInfoProducer {
                 .setHeader(KafkaHeaders.TOPIC, TOPIC_NAME)
                 .build();
 
-        this.kafkaTemplate.send(message);
+        this.userKafkaTemplate.send(message);
     }
 }
