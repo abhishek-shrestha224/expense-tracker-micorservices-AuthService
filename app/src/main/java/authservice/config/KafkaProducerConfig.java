@@ -1,5 +1,7 @@
 package authservice.config;
 
+import authservice.domain.dto.UserDto;
+import com.nimbusds.jose.shaded.gson.JsonSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,23 +19,22 @@ public class KafkaProducerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    public Map<String, Object> kafkaProducerConfig() {
-        HashMap<String, Object> props = new HashMap<>();
+    private Map<String, Object> kafkaProducerConfig() {
+        Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         return props;
     }
 
-    @Bean
-    public ProducerFactory<String, String> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(kafkaProducerConfig());
+
+    private <T> ProducerFactory<String, T> producerFactory(Class<T> valueType) {
+        Map<String, Object> configProps = kafkaProducerConfig();
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(configProps);
     }
 
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate(
-            final ProducerFactory<String, String> producerFactory
-    ) {
-        return new KafkaTemplate<>(producerFactory);
+    public KafkaTemplate<String, UserDto> userKafkaTemplate() {
+        return new KafkaTemplate<>(producerFactory(UserDto.class));
     }
 }
